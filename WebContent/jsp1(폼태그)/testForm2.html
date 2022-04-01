@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+	function checkNull() {
+		var fr = document.fr;
+		
+		if(fr.name.value == '') {
+			alert('이름을 입력하세요.');
+			return false;
+		}
+		if(fr.gender[0].checked == false && fr.gender[1].checked == false) {
+			alert('성별을 선택하세요.');
+			return false;
+		}
+// 		if(fr.hobby[0].checked == false && fr.hobby[1].checked == false && fr.hobby[2].checked == false) {
+// 			alert('취미를 선택하세요.');
+// 			return false;
+// 		}
+		if(document.fr.room.selectedIndex == 0) {
+			alert('강의장을 선택하세요.');
+			return false;
+		}
+	}
+	
+
+</script>
+</head>
+<body>
+	<h1>testForm.2</h1>
+	<!-- 
+		사용자 이름, 
+		성별(radio),
+		취미(checkbox), 3개
+		강의장(select), 7개
+		
+		4개의 정보를 입력 받아서 testPro2.jsp 출력
+	 -->
+	 
+	 <fieldset>
+		<form action="testPro2.jsp" method="get" name="fr" onsubmit="return checkNull();">
+			이름 : <input type="text" name="name"> <br>
+			성별 : 
+				<input type="radio" name="gender" value="남"> 남 
+				<input type="radio" name="gender" value="여"> 여 <br>
+			취미 : 
+				<input type="checkbox" name="hobby" value="요리"> 요리 
+				<input type="checkbox" name="hobby" value="영화"> 영화 
+				<input type="checkbox" name="hobby" value="독서"> 독서 <br>
+			강의장 :
+				<select name="room">
+					<option value="0">강의장을 선택하세요</option>
+					<option value="1">1강의장</option>
+					<option value="2">2강의장</option>
+					<option value="3">3강의장</option>
+					<option value="4">4강의장</option>
+					<option value="5">5강의장</option>
+				</select> 
+				<hr>
+			<input type="submit" value="전송">
+		</form>
+	 </fieldset>
+	
+	
+	
+	
+</body>
+</html>
