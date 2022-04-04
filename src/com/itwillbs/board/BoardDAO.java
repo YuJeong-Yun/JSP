@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -115,7 +116,85 @@ public class BoardDAO {
 	} // insertBoard
 	
 	
+	
+	// 현재 작성된 글 개수 반환 getBoardCount()
+	public int getBoardCount() {
+		int result = 0;
+		
+		try {
+			// 1.2. 디비연결
+			con = getCon();
+			
+			// 3. sql 작성(select) & pstmt 객체
+			sql = "select count(num) from itwill_board";
+			pstmt = con.prepareStatement(sql);
+			
+			// 4. sql 실행
+			rs = pstmt.executeQuery();
+			
+			// 5. 데이터 처리
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+			
+			System.out.println("DAO : 게시판 글개수 " + result + "개");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeDB();
+		}
+		return result;
+	} // getBoardCount()
+	
+	
+	
+	
+	// 작성된 게시글 ArrayList에 저장
+	public ArrayList getBoardList() {
+		ArrayList boardList = new ArrayList();
+		
+		try {
+			// 1.2. 디비 연결
+			con = getCon();
+			
+			// 3. sql 작성 & pstmt 객체
+			sql = "select * from itwill_board order by num desc";
+			pstmt = con.prepareStatement(sql);
+			
+			// 4. sql 실행
+			rs = pstmt.executeQuery();
+			
+			// 5. 데이터 처리
+			// 데이터 있을 때 DB 정보를 모두 저장
+			while(rs.next()) {
+				// 글 1개의 정보 => BoardBean 객체
+				// BoardBean 객체의 정보를 ArrayList 한 칸에 저장
+				BoardBean bb = new BoardBean();
+				
+				bb.setContent(rs.getString("content"));
+				bb.setDate(rs.getDate("date"));
+				bb.setFile(rs.getString("file"));
+				bb.setIp(rs.getString("ip"));
+				bb.setName(rs.getString("name"));
+				bb.setNum(rs.getInt("num"));
+				bb.setPass(rs.getString("pass"));
+				bb.setRe_lev(rs.getInt("re_lev"));
+				bb.setRe_ref(rs.getInt("re_ref"));
+				bb.setRe_seq(rs.getInt("re_seq"));
+				bb.setReadcount(rs.getInt("readcount"));
+				bb.setSubject(rs.getString("subject"));
 
-	
-	
+				boardList.add(bb);
+			}
+			
+			System.out.println("DAO : 게시판 글 전체 목록 저장완료!");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeDB();
+		}
+		
+		return boardList;
+	} // getBoardList
 }

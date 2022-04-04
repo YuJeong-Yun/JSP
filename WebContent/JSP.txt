@@ -145,3 +145,56 @@ web.xml (배포서술자)
  
  => DB 테이블 생성
  
+ 
+ 
+ 
+ 
+ 
+ * 커넥션 풀 : 연결정보를 pool에 저장
+ 
+ https://commons.apache.org/
+ 
+ commons-collections4-4.4.jar
+ commons-pool2-2.11.1.jar
+ commons-dbcp2-2.9.0.jar 
+
+ 1) 컨테이너 안에는 1개의 연결정보 사용
+ 2) 백터( Vector ) 형태와 같은 pool을 사용
+ 3) 연결정보의 개수를 제한
+ 4) 사용이 끝난 경우 관리자가 자원 관리(회수)
+
+  1. 웹브라우저 요청 (DB연결)
+  2. 할당 가능한 커넥션 객체가 있는지 체크
+  3. 커넥션 객체가 있을 때
+  	4. 커넥션 객체 할당
+  	5. 커넥션 객체 사용
+  	6. 커넥션 객체 반환
+  	
+  3-1. 커넥션 객체가 없을 때 
+  	4. 커넥션 객체가 리턴될 때 까지 대기, 임시 객체 생성
+ 
+ 
+  	
+ [ context.xml ]
+ <Context> 내 프로젝트
+	<Resource		//DB연결에 필요한 리소스(정보)
+		name=""		외부에서 해당 리소스를 호출하는 이름
+		auth=""		인증값(자원관리자 설정) - Application/Container 
+		type=""		웹 페이지에서 리소스를 사용할 때 처리되는 클래스
+		driverClassName=""	디비 연결에 필요한 드라이버
+		username=""			디비 아이디
+		password=""			디비 비밀번호
+		url=""				디비 연결주소
+		maxWait=""			커넥션 회수 대기시간(ms)
+	/>
+</Context>
+ 
+ 
+ 
+ [ web.xml ]
+   	<description> 리소스의 설명 </description>
+  	<res-ref-name> context.xml 파일 리소스의 name </res-ref-name>
+  	<res-type> context.xml 파일 리소스의 type </res-type>
+  	<res-auth> context.xml 파일 리소스의 auth </res-auth>
+  	
+  	
