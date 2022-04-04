@@ -1,3 +1,4 @@
+<%@page import="com.itwillbs.board.BoardDAO"%>
 <%@page import="com.itwillbs.board.BoardBean"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -29,12 +30,14 @@
 			
 			
 			// 글 정보를 저장하기 => DB에 접근
-					
 			// BoardDAO  객체 생성
+			BoardDAO dao = new BoardDAO();			
 			
 			// 글쓰기 동작 
+			dao.insertBoard(bb);
 			
 			// 리스트 페이지로 이동
+			response.sendRedirect("boardList.jsp");
 		%>
 		
 

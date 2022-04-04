@@ -35,6 +35,8 @@
 
 	<hr><hr>
 	<h3><a href="../board/wirteForm.jsp">게시판 글쓰기</a></h3>
+	<hr><hr>
+	<h3><a href="../board/boardList.jsp">게시판 목록</a></h3>
 
 
 
