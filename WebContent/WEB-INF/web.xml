@@ -23,4 +23,11 @@
 <!--   </error-page> -->
   
   
+  <resource-ref>
+  	<description>jspdbPool</description>
+  	<res-ref-name>jdbc/board</res-ref-name>
+  	<res-type>javax.sql.DataSource</res-type>
+  	<res-auth>Container</res-auth>
+  </resource-ref>
+  
 </web-app>
