@@ -149,17 +149,72 @@ public class BoardDAO {
 	
 	
 	
-	// 작성된 게시글 ArrayList에 저장
-	public ArrayList getBoardList() {
+//	// 작성된 게시글 ArrayList에 저장
+//	public ArrayList getBoardList() {
+//		ArrayList boardList = new ArrayList();
+//		
+//		try {
+//			// 1.2. 디비 연결
+//			con = getCon();
+//			
+//			// 3. sql 작성 & pstmt 객체
+//			sql = "select * from itwill_board order by num desc limit 0, 5";
+//			pstmt = con.prepareStatement(sql);
+//			
+//			// 4. sql 실행
+//			rs = pstmt.executeQuery();
+//			
+//			// 5. 데이터 처리
+//			// 데이터 있을 때 DB 정보를 모두 저장
+//			while(rs.next()) {
+//				// 글 1개의 정보 => BoardBean 객체
+//				// BoardBean 객체의 정보를 ArrayList 한 칸에 저장
+//				BoardBean bb = new BoardBean();
+//				
+//				bb.setContent(rs.getString("content"));
+//				bb.setDate(rs.getDate("date"));
+//				bb.setFile(rs.getString("file"));
+//				bb.setIp(rs.getString("ip"));
+//				bb.setName(rs.getString("name"));
+//				bb.setNum(rs.getInt("num"));
+//				bb.setPass(rs.getString("pass"));
+//				bb.setRe_lev(rs.getInt("re_lev"));
+//				bb.setRe_ref(rs.getInt("re_ref"));
+//				bb.setRe_seq(rs.getInt("re_seq"));
+//				bb.setReadcount(rs.getInt("readcount"));
+//				bb.setSubject(rs.getString("subject"));
+//
+//				boardList.add(bb);
+//			}
+//			System.out.println("DAO : 게시판 글 전체 목록 저장완료!");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			closeDB();
+//		}
+//		return boardList;
+//	} // getBoardList
+	
+	
+	
+
+	// 오버로딩
+	public ArrayList getBoardList(int startRow, int pageSize) {
 		ArrayList boardList = new ArrayList();
 		
 		try {
 			// 1.2. 디비 연결
 			con = getCon();
 			
-			// 3. sql 작성 & pstmt 객체
-			sql = "select * from itwill_board order by num desc";
+			// 3. sql 작성 & pstmt 객체 (num 내림차순 정렬, 페이징 처리)
+			//		=> re_ref 내림차순, re_seq 오름차순
+			//		=> limit 시작행(0부터 시작함), 개수
+//			sql = "select * from itwill_board order by num desc limit ?, ?";
+			sql = "select * from itwill_board order by re_ref desc, re_seq asc limit ?, ?";
 			pstmt = con.prepareStatement(sql);
+			// ???
+			pstmt.setInt(1, startRow-1);
+			pstmt.setInt(2, pageSize);
 			
 			// 4. sql 실행
 			rs = pstmt.executeQuery();
@@ -183,18 +238,17 @@ public class BoardDAO {
 				bb.setRe_seq(rs.getInt("re_seq"));
 				bb.setReadcount(rs.getInt("readcount"));
 				bb.setSubject(rs.getString("subject"));
-
+				
 				boardList.add(bb);
 			}
-			
 			System.out.println("DAO : 게시판 글 전체 목록 저장완료!");
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeDB();
 		}
-		
 		return boardList;
 	} // getBoardList
+	
+	
 }
