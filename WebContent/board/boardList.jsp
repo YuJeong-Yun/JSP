@@ -66,7 +66,8 @@
 	%>
 				<tr>
 					<td><%= bb.getNum() %></td>
-					<td><%= bb.getSubject() %></td>
+					<td>
+						<a href="boardContent.jsp?num=<%=bb.getNum()%>&pageNum=<%=pageNum%>"><%= bb.getSubject() %></td></a>
 					<td><%= bb.getName()%></td>
 					<td><%= bb.getDate() %></td>
 					<td><%= bb.getReadcount() %></td>
