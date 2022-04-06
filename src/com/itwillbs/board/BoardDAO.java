@@ -320,7 +320,67 @@ public class BoardDAO {
 		} finally {
 			closeDB();
 		}
-		
 		return bb;
 	} // getBoard
+	
+	
+	
+	
+	// 수정 정보 DB에 업데이트하는 메서드
+	public int updateBoard(BoardBean ubb) {
+		int result = -1;
+		
+		try {
+			// 1.2. 디비 연결
+			con = getCon();
+			
+			// 3. sql 작성 & pstmt 객체
+			// 글이 존재하는지 체크
+			sql ="select pass from itwill_board where num = ?";
+			pstmt = con.prepareStatement(sql);
+			// ???
+			pstmt.setInt(1, ubb.getNum());
+			
+			// 4. sql 실행
+			rs = pstmt.executeQuery();
+			
+			// 5. 데이터 처리
+			// 비밀번호가 존재한다 => 게시판 글이 있음!
+			if(rs.next()) {
+				// 글을 쓴 사람일 때만 수정 가능하도록 함
+				// 비밀번호 일치 => 본인임!
+				if(ubb.getPass().equals(rs.getString("pass"))) {
+					// 3. sql 작성(update) & pstmt 객체
+					sql = "update itwill_board set name=?, subject=?, content=? where num=?";
+					pstmt = con.prepareStatement(sql);
+					// ???
+					pstmt.setString(1, ubb.getName());;
+					pstmt.setString(2, ubb.getSubject());
+					pstmt.setString(3, ubb.getContent());
+					pstmt.setInt(4, ubb.getNum());
+					
+					// 4. sql 실행
+					// result = 1과 같음;
+					pstmt.executeUpdate();
+					result = 1;		
+					
+				// 비밀번호 오류 => 본인 아님!
+				} else {
+					result = 0;
+				}
+				
+			} else {
+				result = -1;
+			}
+			System.out.println(" DAO : 정보 수정 완료("+result+")");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeDB();
+		}
+		
+		return result;
+	} // updateBoard 
+	
 }
