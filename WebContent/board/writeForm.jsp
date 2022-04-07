@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>wirteForm.jsp</h1>
+	<h1>writeForm.jsp</h1> 
 	
 	<fieldset>
 		<form action="writePro.jsp" method="post">
