@@ -67,6 +67,10 @@
 				<tr>
 					<td><%= bb.getNum() %></td>
 					<td>
+					<%if(bb.getRe_lev()>0) {%>
+						<img src="level.gif" width="<%=bb.getRe_lev()*10%>">
+						<img src="re.gif">
+					<% } %>
 						<a href="boardContent.jsp?num=<%=bb.getNum()%>&pageNum=<%=pageNum%>"><%= bb.getSubject() %></td></a>
 					<td><%= bb.getName()%></td>
 					<td><%= bb.getDate() %></td>

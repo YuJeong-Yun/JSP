@@ -61,7 +61,7 @@
 			<td colspan="4">
 				<input type="button" value="수정" onclick="location.href='updateForm.jsp?num=<%=bb.getNum()%>&pageNum=<%=pageNum %>';">
 				<input type="button" value="삭제" onclick="location.href='deleteForm.jsp?num=<%=bb.getNum()%>&pageNum=<%=pageNum%>';">
-				<input type="button" value="답글">
+				<input type="button" value="답글" onclick="location.href='reWriteForm.jsp?re_ref=<%=bb.getRe_ref()%>&re_lev=<%=bb.getRe_lev()%>&re_seq=<%=bb.getRe_seq()%>&num=<%=bb.getNum()%>';">
 				<input type="button" value="목록" onclick="location.href='boardList.jsp?pageNum=<%=pageNum%>';">
 			</td>
 		</tr>

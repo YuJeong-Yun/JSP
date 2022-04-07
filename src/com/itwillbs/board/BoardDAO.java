@@ -148,57 +148,6 @@ public class BoardDAO {
 	
 	
 	
-	
-//	// 작성된 게시글 ArrayList에 저장
-//	public ArrayList getBoardList() {
-//		ArrayList boardList = new ArrayList();
-//		
-//		try {
-//			// 1.2. 디비 연결
-//			con = getCon();
-//			
-//			// 3. sql 작성 & pstmt 객체
-//			sql = "select * from itwill_board order by num desc limit 0, 5";
-//			pstmt = con.prepareStatement(sql);
-//			
-//			// 4. sql 실행
-//			rs = pstmt.executeQuery();
-//			
-//			// 5. 데이터 처리
-//			// 데이터 있을 때 DB 정보를 모두 저장
-//			while(rs.next()) {
-//				// 글 1개의 정보 => BoardBean 객체
-//				// BoardBean 객체의 정보를 ArrayList 한 칸에 저장
-//				BoardBean bb = new BoardBean();
-//				
-//				bb.setContent(rs.getString("content"));
-//				bb.setDate(rs.getDate("date"));
-//				bb.setFile(rs.getString("file"));
-//				bb.setIp(rs.getString("ip"));
-//				bb.setName(rs.getString("name"));
-//				bb.setNum(rs.getInt("num"));
-//				bb.setPass(rs.getString("pass"));
-//				bb.setRe_lev(rs.getInt("re_lev"));
-//				bb.setRe_ref(rs.getInt("re_ref"));
-//				bb.setRe_seq(rs.getInt("re_seq"));
-//				bb.setReadcount(rs.getInt("readcount"));
-//				bb.setSubject(rs.getString("subject"));
-//
-//				boardList.add(bb);
-//			}
-//			System.out.println("DAO : 게시판 글 전체 목록 저장완료!");
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		} finally {
-//			closeDB();
-//		}
-//		return boardList;
-//	} // getBoardList
-	
-	
-	
-
-	// 오버로딩
 	public ArrayList getBoardList(int startRow, int pageSize) {
 		ArrayList boardList = new ArrayList();
 		
@@ -438,4 +387,78 @@ public class BoardDAO {
 
 		return result;
 	} // deleteBoard
+	
+	
+	
+	
+	// 답글쓰는 메서드
+	public void reInsertBoard(BoardBean reBB) {
+		int num = 0;
+		
+		try {
+			// 답글 번호 계산 --------------------------------------------------------------------
+			// 1.2. 디비 연결
+			con = getCon();
+			
+			// 3. sql 작성 & pstmt 객체
+			sql = "select max(num) from itwill_board";
+			pstmt = con.prepareStatement(sql);
+			
+			// 4. sql 실행
+			rs = pstmt.executeQuery();
+			
+			// 5. 데이터 처리
+			if(rs.next()) {
+				num = rs.getInt("max(num)")+1;
+			}
+			
+
+			
+			// 답글 순서 재배치 (기존의 답글) ----------------------------------------------------
+			// 3. sql 구문 & pstmt 객체
+			//    답글 중에서 seq 값이 동일한 값이 있을 때 그 값들 1증가
+			//    re_ref(같은 그룹), re_seq(순서)가 기존(부모글)의 값보다 큰 값이 있을 떄
+			sql = "update itwill_board set re_seq = re_seq + 1 where re_ref=? and re_seq>?";
+			pstmt = con.prepareStatement(sql);
+			// ???
+			pstmt.setInt(1, reBB.getRe_ref());
+			pstmt.setInt(2, reBB.getRe_seq());
+			
+			// 4. sql 실행
+			int check = pstmt.executeUpdate();
+			
+			if(check > 0) {
+				System.out.println("  DAO : 답글 순서 재배치 완료!");
+			}
+			
+			
+			
+			// 답글 저장 (ref-부모글의 값, lev-부모+1, seq-부모+1) -------------------------------
+			// 3. sql 작성 & pstmt 객체
+			sql="insert into itwill_board(num, name, pass, subject, content, readcount, "
+					+ "re_ref, re_lev, re_seq, date,ip,file) values(?,?,?,?,?,?,?,?,?,now(),?,?)";
+			pstmt = con.prepareStatement(sql);
+			// ???
+			pstmt.setInt(1, num);
+			pstmt.setString(2, reBB.getName());
+			pstmt.setString(3, reBB.getPass());
+			pstmt.setString(4, reBB.getSubject());
+			pstmt.setString(5, reBB.getContent());
+			pstmt.setInt(6, 0); // 조회수 0
+			pstmt.setInt(7, reBB.getRe_ref()); // ref = 부모글의 번호
+			pstmt.setInt(8, reBB.getRe_lev()+1); // lev = 부모글 + 1
+			pstmt.setInt(9, reBB.getRe_seq()+1); // seq = 부모글 + 1
+			pstmt.setString(10, reBB.getIp());
+			pstmt.setString(11, reBB.getFile());
+			
+			// 4. sql 실행
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeDB();
+		}
+
+	} // reWrite
 }
