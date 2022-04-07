@@ -25,11 +25,11 @@
 		// DAO 객체 생성
 		BoardDAO dao = new BoardDAO(); 
 		
-		// 글 삭제 동작()(deleteBoard()) - 수정 결과 리턴 (-1, 0, 1)
+		// 글 삭제 동작()(deleteBoard()) - 삭제 결과 리턴 (-1, 0, 1)
 		int result = dao.deleteBoard(bb);
 
 		// 삭제 정보에 따른 페이지 이동
-		// 수정완료 1 : 게시판 페이지로 이동
+		// 삭제완료 1 : 게시판 페이지로 이동
 		if(result == 1) {
 	%>
 			<script type="text/javascript">
@@ -37,7 +37,7 @@
 				location.href='boardList.jsp?pageNum=<%=request.getParameter("pageNum")%>';
 			</script>
 	<%		
-		// 삭제완료 : 0 : 실제 삭제 X, 페이지 뒤로가기
+		// 삭제완료 0 : 실제 삭제 X, 페이지 뒤로가기
 		} else if(result == 0) {
 	%>
 			<script type="text/javascript">
@@ -45,7 +45,7 @@
 				history.back();
 			</script>
 	<%	
-		// 삭제완료 -1 = 실제 삭제 X, 페이지 뒤로가기 
+		// 삭제완료 -1 : 실제 삭제 X, 페이지 뒤로가기 
 		} else {
 	%>
 			<script type="text/javascript">
