@@ -49,10 +49,17 @@
 			<td>글 제목</td>
 			<td colspan="3"><%=bb.getSubject() %></td>
 		</tr>
+		<% if(bb.getFile() != null) {  %>
 		<tr>
 			<td>첨부파일</td>
-			<td colspan="3"><%=bb.getFile() %></td>
+			<td colspan="3">
+				<!-- 파일 다운 방법1. 브라우저 파싱이되면 이미지, 텍스트 등은 다운 안 됨! -->
+				<a href="../upload/<%=bb.getFile() %>"><%=bb.getFile() %></a><br>
+				<!-- 파일 다운 방법2 -->
+				<a href="../fileUpload/fileDown.jsp?fileName=<%=bb.getFile()%>"><%=bb.getFile() %></a><br>
+			</td>
 		</tr>
+		<% } %>
 		<tr>
 			<td>글 내용</td>
 			<td colspan="3"><%=bb.getContent() %></td>
